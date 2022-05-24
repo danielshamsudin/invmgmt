@@ -19,6 +19,7 @@ const nav = () => {
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/summary">Summary</Nav.Link>
             <Nav.Link href="/add">Add Item</Nav.Link>
+            <Nav.Link href="/dispense">Withdraw Item</Nav.Link>
           </Nav>
         </Container>
       </Navbar>

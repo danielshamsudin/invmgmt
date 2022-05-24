@@ -1,20 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navigation from "../Navigation/Navigation";
 import { Container, Table } from "react-bootstrap";
 
+
+// Fetch Data from items database
+// Cols: Item name, Serial Number, Quantity
 const Home = () => {
 
-  let items = [];
+  const [data, setData] = useState([]);
 
-  for (let i = 1; i < 11; i++) {
-    items[i] = {
-      id: i,
-      name: "Item " + i,
-      serial: 123456789,
-      qty: i,
-      remarks: "Old"
+  useEffect(() => {
+    for (let i = 0; i < 11; i++) {
+      setData(d => [...d, {
+        id: i,
+        name: "item " + i,
+        serial: 123 + i,
+        qty: i,
+      }])
     }
-  }
+  }, [])
   return (
     <>
       <Navigation />
@@ -30,16 +34,14 @@ const Home = () => {
               <th>Item Name</th>
               <th>Serial No.</th>
               <th>Quantity</th>
-              <th>Remarks</th>
             </tr>
-            {items.map((item) => {
+            {data.map((item) => {
               return (
                 <tr key={item.id}>
                   <td>{item.id}</td>
                   <td>{item.name}</td>
                   <td>{item.serial}</td>
                   <td>{item.qty}</td>
-                  <td>{item.remarks}</td>
                 </tr>
               )
             })}
