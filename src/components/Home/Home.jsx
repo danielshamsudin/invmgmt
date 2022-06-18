@@ -40,8 +40,17 @@ const Home = () => {
     setLoading(false);
   }
 
-  const handleDelete = async (docId) => {
+  const handleDelete = async (docId, itemName, serialNumber, quantity, by, date, remarks) => {
     await db.collection('items').doc(docId).delete();
+    await db.collection('transaction').add({
+      itemName: itemName,
+      serialNumber: serialNumber,
+      quantity: quantity,
+      date: date,
+      by: by,
+      type: "delete",
+      remarks: remarks,
+    })
     setShowModal(true);
   }
 
@@ -93,8 +102,7 @@ const Home = () => {
                   <td>{item.remarks}</td>
                   <td>{item.date}</td>
                   <td>
-                    <Button variant="danger" size="sm" onClick={() => handleDelete(item.docId)}>Delete</Button>&nbsp;&nbsp;
-                    <Button variant="info" size="sm">Edit</Button>
+                    <Button variant="danger" size="sm" onClick={() => handleDelete(item.docId, item.itemName, item.serialNumber, item.quantity, item.by, item.date, item.remarks)}>Delete All</Button>&nbsp;&nbsp;
                   </td>
                 </tr>
               )
