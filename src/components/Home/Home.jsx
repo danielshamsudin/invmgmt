@@ -1,13 +1,22 @@
 import React, { useState, useEffect } from "react";
 import Navigation from "../Navigation/Navigation";
-import { Container, Table, Button } from "react-bootstrap";
+import { Container, Table, Button, Modal, Spinner } from "react-bootstrap";
 import { db } from '../../firebase';
+import { findAllByTestId } from "@testing-library/react";
 
 // Fetch Data from items database
 // Cols: Item name, Serial Number, Quantity
 const Home = () => {
 
   const [data, setData] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  const handleClose = () => {
+    setShowModal(false);
+    window.location.reload();
+  }
+  const handleShow = () => setShowModal(true);
 
   const fetchData = async () => {
     const items = await db.collection('items').get();
@@ -28,6 +37,12 @@ const Home = () => {
         docId: docId[i]
       }]);
     }
+    setLoading(false);
+  }
+
+  const handleDelete = async (docId) => {
+    await db.collection('items').doc(docId).delete();
+    setShowModal(true);
   }
 
   useEffect(() => {
@@ -35,13 +50,27 @@ const Home = () => {
   }, [])
   return (
     <>
+      <Modal show={showModal} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Success</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Item has been deleted
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
       <Navigation />
       <br />
       <br />
       <br />
       <Container>
         <h1>Items</h1>
-        <Table>
+        {loading ? <Spinner animation="border" size="lg" variant="primary"></Spinner> : <Table>
           <thead>
             <tr>
               <th>No.</th>
@@ -51,6 +80,7 @@ const Home = () => {
               <th>Added By</th>
               <th>Bulk Remarks</th>
               <th>Date</th>
+              <th></th>
             </tr>
             {data.map((item) => {
               return (
@@ -62,17 +92,15 @@ const Home = () => {
                   <td>{item.by}</td>
                   <td>{item.remarks}</td>
                   <td>{item.date}</td>
-                  <td>{item.docId}</td>
-                  <td><Button variant="danger" onClick={() => {
-                    db.collection('items').doc(item.docId).delete();
-                    window.location.reload();
-                  }
-                  }>Delete</Button></td>
+                  <td>
+                    <Button variant="danger" size="sm" onClick={() => handleDelete(item.docId)}>Delete</Button>&nbsp;&nbsp;
+                    <Button variant="info" size="sm">Edit</Button>
+                  </td>
                 </tr>
               )
             })}
           </thead>
-        </Table>
+        </Table>}
       </Container>
     </>
   );

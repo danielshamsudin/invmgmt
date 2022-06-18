@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Navigation from "../Navigation/Navigation";
-import { Container, Table } from "react-bootstrap";
+import { Container, Table, Spinner } from "react-bootstrap";
 import { db } from '../../firebase';
 
 // Fetch data from summary table
@@ -9,6 +9,7 @@ import { db } from '../../firebase';
 const Summary = () => {
 
 	const [summary, setSummary] = useState([]);
+	const [loading, setLoading] = useState(true);
 	let newDate = new Date();
 	let fDate = newDate.toDateString();
 
@@ -29,21 +30,11 @@ const Summary = () => {
 				}]);
 			}
 		}
+		setLoading(false);
 	}
 
 
 	useEffect(() => {
-		// for (let i = 0; i < 11; i++) {
-		// 	setSummary(s => [...s, {
-		// 		id: i,
-		// 		name: "item " + i,
-		// 		serial: 123 + i,
-		// 		qty: i,
-		// 		date: "2020-01-01",
-		// 		by: "admin",
-		// 		remarks: "taken from stock",
-		// 	}])
-		// }
 		fetchData();
 	}, []);
 
@@ -54,7 +45,7 @@ const Summary = () => {
 			<Container>
 				<h1>Summary of {fDate}</h1>
 				<br />
-				<Table>
+				{loading ? <Spinner animation="border" size="lg" variant="primary"></Spinner> : <Table>
 					<thead>
 						<tr>
 							<th>No.</th>
@@ -79,8 +70,7 @@ const Summary = () => {
 							)
 						})}
 					</thead>
-
-				</Table>
+				</Table>}
 			</Container>
 
 		</>

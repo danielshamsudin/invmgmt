@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Navigation from '../Navigation/Navigation';
-import { Button, Container, Form } from "react-bootstrap";
+import { Button, Container, Form, Modal } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { db } from "../../firebase";
@@ -13,12 +13,15 @@ const Add = () => {
 	const [startDate, setStartDate] = useState(new Date());
 	const [by, setBy] = useState("");
 	const [remarks, setRemarks] = useState("");
+	const [showModal, setShowModal] = useState(false);
 
 	const handleQty = event => {
 		const res = event.replace(/\D/g, "");
 		setQty(res);
 	}
 
+	const handleClose = () => setShowModal(false);
+	const handleShow = () => setShowModal(true);
 
 	const handleSubmit = async event => {
 		event.preventDefault();
@@ -39,15 +42,28 @@ const Add = () => {
 			type: "add",
 			remarks: remarks
 		});
-		console.log(res.id, " added succ");
-		console.log(trx.id, " added trx succ");
-		// display open modal on success
+
+		setShowModal(true);
+
 	}
 	// Item name, serial number, quantity, by, date, remarks
 	return (
 		<>
 			<Navigation />
 			<br /><br /><br />
+			<Modal show={showModal} onHide={handleClose}>
+				<Modal.Header closeButton>
+					<Modal.Title>Success</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					<p>Item has been added successfully!</p>
+				</Modal.Body>
+				<Modal.Footer>
+					<Button variant="secondary" onClick={handleClose}>
+						Close
+					</Button>
+				</Modal.Footer>
+			</Modal>
 			<Container>
 				<h1>Add Item</h1>
 				<Form>
