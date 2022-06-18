@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import Navigation from '../Navigation/Navigation';
-import { Container, Form } from "react-bootstrap";
+import { Button, Container, Form } from "react-bootstrap";
 import DatePicker from "react-datepicker";
-
 import "react-datepicker/dist/react-datepicker.css";
+import { db } from "../../firebase";
+
 
 const Add = () => {
 	const [itemName, setItemName] = useState("");
@@ -18,6 +19,30 @@ const Add = () => {
 		setQty(res);
 	}
 
+
+	const handleSubmit = async event => {
+		event.preventDefault();
+		const res = await db.collection("items").add({
+			itemName: itemName,
+			serialNumber: serial,
+			quantity: qty,
+			date: startDate.toDateString(),
+			by: by,
+			remarks: remarks
+		});
+		const trx = await db.collection("transaction").add({
+			itemName: itemName,
+			serialNumber: serial,
+			quantity: qty,
+			date: startDate.toDateString(),
+			by: by,
+			type: "add",
+			remarks: remarks
+		});
+		console.log(res.id, " added succ");
+		console.log(trx.id, " added trx succ");
+		// display open modal on success
+	}
 	// Item name, serial number, quantity, by, date, remarks
 	return (
 		<>
@@ -42,9 +67,22 @@ const Add = () => {
 						<Form.Label>Date</Form.Label>
 						<DatePicker selected={startDate} dateFormat="dd/M/yyyy" onChange={(date) => { setStartDate(date) }} />
 					</Form.Group>
+					<Form.Group className="mb-3">
+						<Form.Label>Added By</Form.Label>
+						<Form.Select onChange={(e) => { setBy(e.target[e.target.value].innerHTML) }}>
+							<option>Select</option>
+							<option value="1">Admin</option>
+							<option value="2">Worker</option>
+						</Form.Select>
+					</Form.Group>
+					<Form.Group className="mb-3">
+						<Form.Label>Remarks</Form.Label>
+						<Form.Control type="name" placeholder="Enter Item Remarks" onChange={(e) => { setRemarks(e.target.value) }} />
+					</Form.Group>
+					<Button variant="primary" type="submit" onClick={handleSubmit}> Submit </Button>
 				</Form>
 			</Container>
-			<h1>Name: {itemName}</h1>
+			{/* <h1>Name: {itemName}</h1>
 			<br />
 			<h1>Serial Number: {serial}</h1>
 			<br />
@@ -54,7 +92,7 @@ const Add = () => {
 			<br />
 			<h1>By: {by}</h1>
 			<br />
-			<h1>Remarks: {remarks}</h1>
+			<h1>Remarks: {remarks}</h1> */}
 
 		</>
 	)
