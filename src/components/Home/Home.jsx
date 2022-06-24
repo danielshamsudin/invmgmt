@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Navigation from "../Navigation/Navigation";
 import { Container, Table, Button, Modal, Spinner } from "react-bootstrap";
 import { db } from '../../firebase';
-import { findAllByTestId } from "@testing-library/react";
 
 // Fetch Data from items database
 // Cols: Item name, Serial Number, Quantity
@@ -46,7 +45,7 @@ const Home = () => {
       itemName: itemName,
       serialNumber: serialNumber,
       quantity: quantity,
-      date: date,
+      date: new Date().toDateString(),
       by: by,
       type: "delete",
       remarks: remarks,
@@ -102,7 +101,7 @@ const Home = () => {
                   <td>{item.remarks}</td>
                   <td>{item.date}</td>
                   <td>
-                    <Button variant="danger" size="sm" onClick={() => handleDelete(item.docId, item.itemName, item.serialNumber, item.quantity, item.by, item.date, item.remarks)}>Delete All</Button>&nbsp;&nbsp;
+                    <Button variant="danger" size="sm" onClick={() => handleDelete(item.docId, item.itemName, item.serialNumber, item.quantity, item.by, item.date, item.remarks)}>{item.quantity == 1 ? "Delete" : "Delete All"}</Button>&nbsp;&nbsp;
                   </td>
                 </tr>
               )
