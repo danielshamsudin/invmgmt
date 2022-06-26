@@ -20,9 +20,6 @@ const Dispense = () => {
 	const handleClosePrompt = () => setPrompt(false);
 	const handleShowPrompt = () => setPrompt(true);
 
-	const handleDispense = () => {
-		setShowModal(false);
-	}
 	const handleClose = () => {
 		setShowModal(false);
 		window.location.reload();

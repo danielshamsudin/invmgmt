@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import Navigation from '../Navigation/Navigation';
 import { Button, Container, Form, Modal } from "react-bootstrap";
 import DatePicker from "react-datepicker";
@@ -43,7 +43,7 @@ const Add = () => {
 			remarks: remarks
 		});
 
-		setShowModal(true);
+		if (res && trx) handleShow();
 
 	}
 	// Item name, serial number, quantity, by, date, remarks
