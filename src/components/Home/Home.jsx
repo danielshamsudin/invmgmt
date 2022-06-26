@@ -77,7 +77,7 @@ const Home = () => {
       <br />
       <br />
       <Container>
-        <h1>Item Mlem</h1>
+        <h1>Items</h1>
         {loading ? <Spinner animation="border" size="lg" variant="primary"></Spinner> : <Table>
           <thead>
             <tr>
