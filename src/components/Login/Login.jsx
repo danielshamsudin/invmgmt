@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { auth } from '../../firebase';
 import { useNavigate } from 'react-router-dom';
 import { Container, Button, Form, Modal } from "react-bootstrap";
-import Navigation from "../Navigation/Navigation";
+import LoglessNav from '../LoglessNav/LoglessNav';
 
 const Login = () => {
 	const navigate = useNavigate();
@@ -46,7 +46,7 @@ const Login = () => {
 					</Button>
 				</Modal.Footer>
 			</Modal>
-			<Navigation />
+			<LoglessNav />
 			<br /><br /><br />
 			<Container>
 				<h1>Login</h1>

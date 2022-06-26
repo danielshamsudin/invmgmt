@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Navigation from "../Navigation/Navigation";
-import { useNavigate } from "react-router-dom";
+import LoglessNav from "../LoglessNav/LoglessNav";
 import { Container, Table, Button, Modal, Spinner } from "react-bootstrap";
 import { db, auth } from '../../firebase';
 
 // Fetch Data from items database
 // Cols: Item name, Serial Number, Quantity
 const Home = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -61,74 +61,71 @@ const Home = () => {
   useEffect(() => {
     fetchData();
   }, [])
-  if (currentUser) {
-    return (
-      <>
-        <Modal show={showModal} onHide={handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>Success</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            Item has been deleted
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-              Close
-            </Button>
-          </Modal.Footer>
-        </Modal>
 
-        <Navigation />
-        <br />
-        <br />
-        <br />
-        <Container>
-          <h1>Items</h1>
-          {loading ? <Spinner animation="border" size="lg" variant="primary"></Spinner> : <Table>
-            <thead>
-              <tr>
-                <th>No.</th>
-                <th>Item Name</th>
-                <th>Serial No.</th>
-                <th>Quantity</th>
-                <th>Added By</th>
-                <th>Bulk Remarks</th>
-                <th>Date</th>
-                <th></th>
-              </tr>
-              {data.map((item) => {
-                return (
-                  <tr key={item.id}>
-                    <td>{item.id}</td>
-                    <td>{item.itemName}</td>
-                    <td>{item.serialNumber}</td>
-                    <td>{item.quantity}</td>
-                    <td>{item.by}</td>
-                    <td>{item.remarks}</td>
-                    <td>{item.date}</td>
-                    <td>
-                      <Button variant="danger" size="sm" onClick={() => handleDelete(item.docId, item.itemName, item.serialNumber, item.quantity, item.by, item.date, item.remarks)}>{item.quantity === 1 ? "Delete" : "Delete All"}</Button>&nbsp;&nbsp;
-                    </td>
-                  </tr>
-                )
-              })}
-            </thead>
-          </Table>}
-        </Container>
-      </>
-    );
-  }
-  else {
-    return (
-      <>
-        <Navigation />
-        <br /><br /><br />
-        <Container>
-          <h3>Please log in / register to continue.</h3>
-        </Container>
-      </>
-    )
-  }
+  return (
+    <>
+      <Modal show={showModal} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Success</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Item has been deleted
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Navigation />
+      <br />
+      <br />
+      <br />
+      {currentUser ? <Container>
+        <h1>Items</h1>
+        {loading ? <Spinner animation="border" size="lg" variant="primary"></Spinner> : <Table>
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>Item Name</th>
+              <th>Serial No.</th>
+              <th>Quantity</th>
+              <th>Added By</th>
+              <th>Bulk Remarks</th>
+              <th>Date</th>
+              <th></th>
+            </tr>
+            {data.map((item) => {
+              return (
+                <tr key={item.id}>
+                  <td>{item.id}</td>
+                  <td>{item.itemName}</td>
+                  <td>{item.serialNumber}</td>
+                  <td>{item.quantity}</td>
+                  <td>{item.by}</td>
+                  <td>{item.remarks}</td>
+                  <td>{item.date}</td>
+                  <td>
+                    <Button variant="danger" size="sm" onClick={() => handleDelete(item.docId, item.itemName, item.serialNumber, item.quantity, item.by, item.date, item.remarks)}>{item.quantity === 1 ? "Delete" : "Delete All"}</Button>&nbsp;&nbsp;
+                  </td>
+                </tr>
+              )
+            })}
+          </thead>
+        </Table>}
+      </Container> :
+        <>
+          <LoglessNav />
+          <br />
+          <br />
+          <br />
+          <Container>
+            <h1>Please login to continue.</h1>
+          </Container>
+        </>}
+    </>
+  );
 };
 
 export default Home;
