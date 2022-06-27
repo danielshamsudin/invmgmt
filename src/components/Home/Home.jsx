@@ -13,9 +13,6 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState(null);
 
-  auth.onAuthStateChanged(user => {
-    setCurrentUser(user);
-  })
   const handleClose = () => {
     setShowModal(false);
     window.location.reload();
@@ -55,10 +52,13 @@ const Home = () => {
       type: "delete",
       remarks: remarks,
     })
-    handleShow();
+    setShowModal(true);
   }
 
   useEffect(() => {
+    auth.onAuthStateChanged(user => {
+      setCurrentUser(user);
+    })
     fetchData();
   }, [])
 

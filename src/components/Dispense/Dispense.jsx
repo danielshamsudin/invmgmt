@@ -149,7 +149,10 @@ const Dispense = () => {
 													setSNum(item.serialNumber);
 													setRemarks(item.remarks);
 													setBy(item.by);
-													handleShowPrompt();
+													{
+														loading ? <Spinner animation="border" size="lg" variant="primary" onAnimationEnd={() => { setLoading(false) }}></Spinner> :
+															handleShowPrompt();
+													}
 												}}>Withdraw</Button>
 											</Card.Text>
 										</Card.Body>
