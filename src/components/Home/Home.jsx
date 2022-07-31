@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from "react";
-import Navigation from "../Navigation/Navigation";
-import LoglessNav from "../LoglessNav/LoglessNav";
+import { Navigation, LoglessNav } from "../../r";
 import { Container, Table, Button, Modal, Spinner } from "react-bootstrap";
 import { db, auth } from '../../firebase';
 
-// Fetch Data from items database
-// Cols: Item name, Serial Number, Quantity
 const Home = () => {
-  // const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -17,7 +13,6 @@ const Home = () => {
     setShowModal(false);
     window.location.reload();
   }
-  const handleShow = () => setShowModal(true);
 
   const fetchData = async () => {
     const items = await db.collection('items').get();
@@ -30,6 +25,7 @@ const Home = () => {
       setData(prevData => [...prevData, {
         id: i + 1,
         itemName: itemsData[i].itemName,
+        machineName: itemsData[i].machineName,
         serialNumber: itemsData[i].serialNumber,
         quantity: itemsData[i].quantity,
         date: itemsData[i].date,
@@ -84,11 +80,14 @@ const Home = () => {
       <br />
       {currentUser ? <Container>
         <h1>Items</h1>
+        <Button variant="primary" href="/machine">View Machines</Button>
+        <br /><br />
         {loading ? <Spinner animation="border" size="lg" variant="primary"></Spinner> : <Table>
           <thead>
             <tr>
               <th>No.</th>
               <th>Item Name</th>
+              <th>Machine Name</th>
               <th>Serial No.</th>
               <th>Quantity</th>
               <th>Added By</th>
@@ -101,6 +100,7 @@ const Home = () => {
                 <tr key={item.id}>
                   <td>{item.id}</td>
                   <td>{item.itemName}</td>
+                  <td>{item.machineName}</td>
                   <td>{item.serialNumber}</td>
                   <td>{item.quantity}</td>
                   <td>{item.by}</td>

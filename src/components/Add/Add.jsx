@@ -9,6 +9,7 @@ import { db } from "../../firebase";
 const Add = () => {
 	const [itemName, setItemName] = useState("");
 	const [serial, setSerial] = useState("");
+	const [machineName, setMachineName] = useState("");
 	const [qty, setQty] = useState(0);
 	const [startDate, setStartDate] = useState(new Date());
 	const [by, setBy] = useState("");
@@ -27,6 +28,7 @@ const Add = () => {
 		event.preventDefault();
 		const res = await db.collection("items").add({
 			itemName: itemName,
+			machineName: machineName,
 			serialNumber: serial,
 			quantity: qty,
 			date: startDate.toDateString(),
@@ -35,6 +37,7 @@ const Add = () => {
 		});
 		const trx = await db.collection("transaction").add({
 			itemName: itemName,
+			machineName: machineName,
 			serialNumber: serial,
 			quantity: qty,
 			date: startDate.toDateString(),
@@ -76,6 +79,10 @@ const Add = () => {
 						<Form.Control type="name" placeholder="Enter Item Serial Number" onChange={(e) => { setSerial(e.target.value) }} />
 					</Form.Group>
 					<Form.Group className="mb-3">
+						<Form.Label>Machine Name</Form.Label>
+						<Form.Control type="name" placeholder="Enter Machine Name" onChange={(e) => { setMachineName(e.target.value.toLowerCase()) }} />
+					</Form.Group>
+					<Form.Group className="mb-3">
 						<Form.Label>Quantity</Form.Label>
 						<Form.Control type="name" placeholder="Enter Item Quantity" onChange={(e) => { handleQty(e.target.value) }} />
 					</Form.Group>
@@ -98,18 +105,6 @@ const Add = () => {
 					<Button variant="primary" type="submit" onClick={handleSubmit}> Submit </Button>
 				</Form>
 			</Container>
-			{/* <h1>Name: {itemName}</h1>
-			<br />
-			<h1>Serial Number: {serial}</h1>
-			<br />
-			<h1>Quantity: {qty}</h1>
-			<br />
-			<h1>Date: {startDate.getDate()}/{startDate.getMonth() + 1}/{startDate.getFullYear()}</h1>
-			<br />
-			<h1>By: {by}</h1>
-			<br />
-			<h1>Remarks: {remarks}</h1> */}
-
 		</>
 	)
 }

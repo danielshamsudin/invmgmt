@@ -5,10 +5,6 @@ import { db } from '../../firebase';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-
-// Fetch data from summary table
-// Cols: Item name, Serial Number, Quantity, Remarks
-// Remarks data is entered from the form when item is dispatched
 const Summary = () => {
 
 	let newDate = new Date();
@@ -17,7 +13,6 @@ const Summary = () => {
 	const [loading, setLoading] = useState(true);
 	const [date, setDate] = useState(new Date());
 	const [dateChoosen, setDateChoosen] = useState(fDate);
-	// setDateChoosen(fDate);
 
 	const fetchData = async () => {
 		const items = await db.collection('transaction').get();
@@ -28,6 +23,7 @@ const Summary = () => {
 				setSummary(prevData => [...prevData, {
 					id: i + 1,
 					itemName: itemsData[i].itemName,
+					machineName: itemsData[i].machineName,
 					serialNumber: itemsData[i].serialNumber,
 					quantity: itemsData[i].quantity,
 					remarks: itemsData[i].remarks,
@@ -63,6 +59,7 @@ const Summary = () => {
 						<tr>
 							<th>No.</th>
 							<th>Item Name</th>
+							<th>Machine Name</th>
 							<th>Serial No.</th>
 							<th>Quantity</th>
 							<th>By</th>
@@ -74,6 +71,7 @@ const Summary = () => {
 								<tr key={item.id}>
 									<td>{item.id}</td>
 									<td>{item.itemName}</td>
+									<td>{item.machineName}</td>
 									<td>{item.serialNumber}</td>
 									<td>{item.quantity}</td>
 									<td>{item.by}</td>
@@ -85,7 +83,6 @@ const Summary = () => {
 					</thead>
 				</Table>}
 			</Container>
-
 		</>
 	)
 }
