@@ -44,8 +44,8 @@ const Machine = () => {
 				<Container>
 					<Spinner animation="border" size="lg" variant="primary" />
 				</Container> :
-				<>
-					<Row xs={1} md={2} className="g-4" style={{ margin: 'auto' }}>
+				<Container>
+					<Row xs={1} md={2} lg={4} className="g-4" style={{ margin: 'auto' }}>
 						{macName.map(mac => (
 							<Col>
 								<Card key={mac} style={{ width: "20rem", height: "100%" }}>
@@ -76,7 +76,7 @@ const Machine = () => {
 							</Col>
 						))}
 					</Row>
-				</>
+				</Container>
 			}
 		</>
 	)
